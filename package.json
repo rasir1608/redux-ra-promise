@@ -2,7 +2,7 @@
   "name": "redux-ra-promise",
   "version": "1.0.0",
   "description": "redux 中间件。允许用户使用 Promise 函数进行异步处理。与redux-promise 不同的是，redux-promise 是处理 action 或 action.payload 为 Promise 的情况，而redux-ra-promise 是处理当响应函数为Promise的情况",
-  "main": "./lib/src/index.js",
+  "main": "./lib/common/index.js",
   "scripts": {
     "test": "jest --config=jest.config.js",
     "build": "node ./script",
