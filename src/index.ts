@@ -80,8 +80,8 @@ function dispatchFactory(
   };
 }
 
-export function registerPromise(namespace, key, effFun) {
-  effectsMap[`${namespace}/${key}`] = effFun;
+export function registerPromise(key, effFun) {
+  effectsMap[key] = effFun;
 }
 
 export function raPromiseMiddlewaer(middel) {

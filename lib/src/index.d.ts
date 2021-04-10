@@ -25,5 +25,5 @@ export interface LoadingModel {
     };
 }
 export declare const loadingModel: LoadingModel;
-export declare function registerPromise(namespace: any, key: any, effFun: any): void;
+export declare function registerPromise(key: any, effFun: any): void;
 export declare function raPromiseMiddlewaer(middel: any): (next: any) => (action: any) => any;
