@@ -44,6 +44,9 @@ const effects = {
       });
     });
   },
+  getRet: ({ payload }, { select, lodash }) => {
+    return 'aa';
+  },
 };
 
 Object.keys(effects).forEach((key) => {
@@ -73,5 +76,10 @@ describe('ra-promise 1', () => {
 test('await ret = 2', () => {
   (store.dispatch({ type: 'getAdd', payload: 1 }) as any).then((ret) => {
     expect(ret).toBe(1);
+  });
+});
+test('plain function', () => {
+  (store.dispatch({ type: 'getRet' }) as any).then((ret) => {
+    expect(ret).toEqual('aa');
   });
 });

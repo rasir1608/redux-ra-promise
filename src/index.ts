@@ -84,36 +84,46 @@ export function registerPromise(key, effFun) {
   effectsMap[key] = effFun;
 }
 
-export function raPromiseMiddlewaer(middel) {
+export function raPromiseMiddlewaer(store) {
   return function (next) {
     return function (action) {
-      const fun = effectsMap[action.type];
-      if (fun) {
-        return new Promise((resolve) => {
-          const funResult = fun(action, {
-            select: middel.getState,
+      const effectFun = effectsMap[action.type];
+      if (effectFun) {
+        return new Promise((resolve, reject) => {
+          const funResult = effectFun(action, {
+            select: store.getState,
             dispatch: dispatchFactory(
               action.type.includes('/') ? action.type.split('/')[0] : undefined,
-              middel.dispatch,
+              store.dispatch,
             ),
             delay,
             nextTick,
             lodash: _,
           });
-          if (typeof funResult.then === 'function') {
-            middel.dispatch({
+          //  如果是 Promise 函数走 异步过程
+          if (
+            funResult &&
+            typeof funResult === 'object' &&
+            typeof funResult.then === 'function'
+          ) {
+            store.dispatch({
               type: 'loading/updateLoading',
               payload: { [action.type]: true },
             });
             nextTick(() => {
-              funResult.then((ret) => {
-                middel.dispatch({
-                  type: 'loading/updateLoading',
-                  payload: { [action.type]: false },
-                });
-                resolve(ret);
-              });
+              funResult
+                .then((ret) => {
+                  store.dispatch({
+                    type: 'loading/updateLoading',
+                    payload: { [action.type]: false },
+                  });
+                  resolve(ret);
+                })
+                .catch(reject);
             });
+          } else {
+            // 如果不是 Promise 函数直接返回 结果
+            resolve(funResult);
           }
         });
       }
