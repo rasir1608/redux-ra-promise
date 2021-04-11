@@ -8,7 +8,7 @@ export declare type EffectHelper = {
     select: () => NormalObject;
     dispatch: (action: AnyAction) => Promise<any>;
     delay: (time: number, value?: any) => Promise<any>;
-    nextTick: (callback: () => void, thisObject: any) => void;
+    nextTick: (callback: () => void) => void;
     lodash: LoDashStatic;
 };
 export declare type Effect = (action: AnyAction, helper: EffectHelper) => Promise<any>;
