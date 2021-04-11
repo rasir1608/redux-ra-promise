@@ -16,17 +16,33 @@ redux 中间件。允许用户使用 Promise 函数进行异步处理。与 redu
   `ra-promise 中间件`
 - loadingModel
   `异步管理状态`
+- mixinLoadingState
+  `将loading的state混合进入redux的初始值中`
+- mixinLoadingReducers
+  `将loading的redux混合进入redux的reducer中`
 
 #### 使用方法
 
 ```
 // store.js
 import { createStore, applyMiddleware } from 'redux';
-import { raPromiseMiddlewaer, registerPromise } from 'redux-ra-promise';
+import { raPromiseMiddlewaer, registerPromise,  mixinLoadingReducers, mixinLoadingState } from 'redux-ra-promise';
 
-const initState = {
+/*
+  minxin 之后的 initState 数据结构
+  {
+    counter:0,
+    loading:{
+      effects:{}
+    }
+  }
+*/
+
+const initState = mixinLoadingState({
   counter: 0,
-};
+});
+
+
 
 const reducer = function (state = { counter: 0 }, action) {
   switch (action.type) {
@@ -61,7 +77,7 @@ const effects = {
     return new Promise((resolve) => {
       lodash.debounce(() => {
         setTimeout(() => {
-          const { counter } = select;
+          const { counter } = select();
           resolve(counter + payload);
         }, 500);
       });
@@ -75,7 +91,7 @@ Object.keys(effects).forEach((key) => {
 
 // 生成 store
 const store = createStore(
-  reducer,
+  mixinLoadingReducers(initState, reducer),
   initState,
   applyMiddleware(raPromiseMiddlewaer),
 );

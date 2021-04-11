@@ -1,6 +1,7 @@
 import { AnyAction, Reducer } from 'redux';
 import _, { LoDashStatic } from 'lodash';
 
+const reducerFuncname = Symbol('@@loadingFuncname');
 export { AnyAction, Reducer };
 
 export type NormalObject = { [key: string]: any };
@@ -22,7 +23,7 @@ export interface LoadingModel {
   namespace: 'loading';
   state: LoadingModelState;
   reducers: {
-    updateLoading: Reducer;
+    [reducerFuncname]: Reducer;
   };
 }
 
@@ -45,7 +46,7 @@ export const loadingModel: LoadingModel = {
     effects: {},
   },
   reducers: {
-    updateLoading: (state: NormalObject, action: AnyAction) => {
+    [reducerFuncname]: (state: NormalObject, action: AnyAction) => {
       if (action.payload && typeof action.payload === 'object') {
         Object.keys(action.payload).forEach((key) => {
           state.effects[key] = action.payload[key];
@@ -55,6 +56,27 @@ export const loadingModel: LoadingModel = {
     },
   },
 };
+
+// 混入 initState
+export function mixinLoadingState(initState: NormalObject = {}) {
+  return Object.assign(initState, { loading: loadingModel.state });
+}
+// 混入 redux
+export function mixinLoadingReducers(
+  initState: NormalObject = { loading: { effects: {} } },
+  reducers: Reducer,
+): Reducer {
+  const newReducers = function (state = initState, action: AnyAction) {
+    if (loadingModel.reducers[action.type]) {
+      const func = loadingModel.reducers[action.type];
+      const namestate = func(state.loading, action);
+      state.loading = namestate;
+      return state;
+    }
+    return reducers(state, action);
+  };
+  return newReducers;
+}
 
 function dispatchFactory(
   namespace: string | undefined | null,
@@ -107,14 +129,14 @@ export function raPromiseMiddlewaer(store) {
             typeof funResult.then === 'function'
           ) {
             store.dispatch({
-              type: 'loading/updateLoading',
+              type: reducerFuncname,
               payload: { [action.type]: true },
             });
             nextTick(() => {
               funResult
                 .then((ret) => {
                   store.dispatch({
-                    type: 'loading/updateLoading',
+                    type: reducerFuncname,
                     payload: { [action.type]: false },
                   });
                   resolve(ret);
