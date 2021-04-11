@@ -9,7 +9,7 @@ export type EffectHelper = {
   select: () => NormalObject;
   dispatch: (action: AnyAction) => Promise<any>;
   delay: (time: number, value?: any) => Promise<any>;
-  nextTick: (callback: () => void, thisObject: any) => void;
+  nextTick: (callback: () => void) => void;
   lodash: LoDashStatic;
 };
 
@@ -34,8 +34,8 @@ function delay(time = 300, value = true) {
   });
 }
 
-function nextTick(callback: () => void, thisObject?: any) {
-  Promise.resolve().then(callback.bind(thisObject));
+function nextTick(callback: () => void) {
+  Promise.resolve().then(callback);
 }
 
 // 用来做统一的异步状态管理
