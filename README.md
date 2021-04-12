@@ -137,7 +137,7 @@ export default connect(({counter}) => ({counter }),
 
 ```
 
-以上是普通的用户，也支持 `namespace/funcname` 格式的用法。
+以上是普通的用法，也支持 `namespace/funcname` 格式的用法。
 
 如果是习惯使用 dva 的 model 的用户在单个 model 内 effets 中函数中使用 dispatch 的 type 如果没有加 `namespace` 前缀，中间件会自动给你加上去。
 比如你的数据结构如下：
