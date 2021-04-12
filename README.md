@@ -8,6 +8,14 @@
 
 redux 中间件。允许用户使用 Promise 函数进行异步处理。与 redux-promise 不同的是，redux-promise 是处理 action 或 action.payload 为 Promise 的情况，而 redux-ra-promise 是处理当响应函数为 Promise 的情况
 
+#### 安装
+可以通过 npm 或 yarn 进行安装
+```
+npm i redux-ra-promise
+或者
+yarn add redux-ra-promise
+```
+
 #### API
 
 - registerPromise
