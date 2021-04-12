@@ -11,9 +11,9 @@ redux 中间件。允许用户使用 Promise 函数进行异步处理。与 redu
 #### 安装
 可以通过 npm 或 yarn 进行安装
 ```
-npm i redux-ra-promise
+npm i redux-ra-promise --save
 或者
-yarn add redux-ra-promise
+yarn add redux-ra-promise --save
 ```
 
 #### API
