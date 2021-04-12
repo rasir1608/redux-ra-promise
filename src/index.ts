@@ -52,7 +52,7 @@ export const loadingModel: LoadingModel = {
           state.effects[key] = action.payload[key];
         });
       }
-      return state;
+      return Object.assign({}, state);
     },
   },
 };
@@ -69,9 +69,9 @@ export function mixinLoadingReducers(
   const newReducers = function (state = initState, action: AnyAction) {
     if (loadingModel.reducers[action.type]) {
       const func = loadingModel.reducers[action.type];
-      const namestate = func(state.loading, action);
-      state.loading = namestate;
-      return state;
+      const loadingState = func(state.loading, action);
+      state.loading = loadingState;
+      return Object.assign({}, state);
     }
     return reducers(state, action);
   };
