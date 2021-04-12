@@ -27,7 +27,7 @@ yarn add redux-ra-promise
 - mixinLoadingState
   `将loading的state混合进入redux的初始值中`
 - mixinLoadingReducers
-  `将loading的redux混合进入redux的reducer中`
+  `将loading的reducer混合进入redux的reducer中`
 
 #### 使用方法
 
@@ -342,6 +342,7 @@ export default store;
 #### `loadingModel` 的用法
 
 仿照 `dva` 的习惯，提供了 `loading.effects` API。在使用 `redux` 时，只要将 `loadingModel.state` 放入 `initState` ，`loadingModel.reducer` 混合进 `reducers` 就可以通过 `store.getState()` 拿到 `loading.effect[type]` 的 `boolean` 值。使用方法和 `dva` 一样。
+本库提供了 mixinLoadingState，mixinLoadingReducers API来简化这个过程，您可以通过引入loadingModel 自己混入。
 
 ```
 // 有 namespace 的配置
