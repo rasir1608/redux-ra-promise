@@ -12,7 +12,7 @@ redux 中间件。允许用户使用 Promise 函数进行异步处理。与 redu
 
 - registerPromise
   ` 注册 Promise 异步处理函数`
-- raPromiseMiddlewaer
+- raPromiseMiddleware
   `ra-promise 中间件`
 - loadingModel
   `异步管理状态`
@@ -26,7 +26,7 @@ redux 中间件。允许用户使用 Promise 函数进行异步处理。与 redu
 ```
 // store.js
 import { createStore, applyMiddleware } from 'redux';
-import { raPromiseMiddlewaer, registerPromise,  mixinLoadingReducers, mixinLoadingState } from 'redux-ra-promise';
+import { raPromiseMiddleware, registerPromise,  mixinLoadingReducers, mixinLoadingState } from 'redux-ra-promise';
 
 /*
   minxin 之后的 initState 数据结构
@@ -93,7 +93,7 @@ Object.keys(effects).forEach((key) => {
 const store = createStore(
   mixinLoadingReducers(initState, reducer),
   initState,
-  applyMiddleware(raPromiseMiddlewaer),
+  applyMiddleware(raPromiseMiddleware),
 );
 
 ... redux 使用不赘述
@@ -186,7 +186,7 @@ export default message;
 import { createStore, applyMiddleware, AnyAction } from "redux";
 import {
   Effect,
-  raPromiseMiddlewaer,
+  raPromiseMiddleware,
   registerPromise,
   loadingModel
 } from "redux-ra-promise";
@@ -321,7 +321,7 @@ modules.forEach(registerStore);
 const store = createStore(
   combinReducers,
   initState,
-  applyMiddleware(raPromiseMiddlewaer)
+  applyMiddleware(raPromiseMiddleware)
 );
 export { subScribesMap, ReduxStore };
 export default store;

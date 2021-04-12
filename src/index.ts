@@ -1,7 +1,9 @@
 import { AnyAction, Reducer } from 'redux';
 import _, { LoDashStatic } from 'lodash';
 
-const reducerFuncname = Symbol('@@loadingFuncname');
+const REDUCER_FUNC_NAME = Symbol
+  ? Symbol('@@#loadingFuncname#@@')
+  : '@@#loadingFuncname#@@';
 export { AnyAction, Reducer };
 
 export type NormalObject = { [key: string]: any };
@@ -23,7 +25,7 @@ export interface LoadingModel {
   namespace: 'loading';
   state: LoadingModelState;
   reducers: {
-    [reducerFuncname]: Reducer;
+    [key: string]: Reducer;
   };
 }
 
@@ -46,7 +48,7 @@ export const loadingModel: LoadingModel = {
     effects: {},
   },
   reducers: {
-    [reducerFuncname]: (state: NormalObject, action: AnyAction) => {
+    [REDUCER_FUNC_NAME]: (state: NormalObject, action: AnyAction) => {
       if (action.payload && typeof action.payload === 'object') {
         Object.keys(action.payload).forEach((key) => {
           state.effects[key] = action.payload[key];
@@ -106,7 +108,7 @@ export function registerPromise(key, effFun) {
   effectsMap[key] = effFun;
 }
 
-export function raPromiseMiddlewaer(store) {
+export function raPromiseMiddleware(store) {
   return function (next) {
     return function (action) {
       const effectFun = effectsMap[action.type];
@@ -129,14 +131,14 @@ export function raPromiseMiddlewaer(store) {
             typeof funResult.then === 'function'
           ) {
             store.dispatch({
-              type: reducerFuncname,
+              type: REDUCER_FUNC_NAME,
               payload: { [action.type]: true },
             });
             nextTick(() => {
               funResult
                 .then((ret) => {
                   store.dispatch({
-                    type: reducerFuncname,
+                    type: REDUCER_FUNC_NAME,
                     payload: { [action.type]: false },
                   });
                   resolve(ret);
@@ -144,7 +146,7 @@ export function raPromiseMiddlewaer(store) {
                 .catch(reject);
             });
           } else {
-            // 如果不是 Promise 函数直接返回 结果
+            // 如果不是 Promise 函数直接返回结果
             resolve(funResult);
           }
         });

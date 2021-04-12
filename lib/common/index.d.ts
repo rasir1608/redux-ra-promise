@@ -1,6 +1,5 @@
 import { AnyAction, Reducer } from 'redux';
 import { LoDashStatic } from 'lodash';
-declare const reducerFuncname: unique symbol;
 export { AnyAction, Reducer };
 export declare type NormalObject = {
     [key: string]: any;
@@ -22,7 +21,7 @@ export interface LoadingModel {
     namespace: 'loading';
     state: LoadingModelState;
     reducers: {
-        [reducerFuncname]: Reducer;
+        [key: string]: Reducer;
     };
 }
 export declare const loadingModel: LoadingModel;
@@ -31,4 +30,4 @@ export declare function mixinLoadingState(initState?: NormalObject): NormalObjec
 };
 export declare function mixinLoadingReducers(initState: NormalObject | undefined, reducers: Reducer): Reducer;
 export declare function registerPromise(key: any, effFun: any): void;
-export declare function raPromiseMiddlewaer(store: any): (next: any) => (action: any) => any;
+export declare function raPromiseMiddleware(store: any): (next: any) => (action: any) => any;
